@@ -470,7 +470,7 @@ const MAP_DATA = {data_json};
     clearHighlight();
     if (key && geometryByKey.has(key)) {{
       const geometry = geometryByKey.get(key);
-      highlightGroup = L.layerGroup().addTo(map);
+      highlightGroup = L.featureGroup().addTo(map);
       // White casing first so the amber stroke survives any basemap tone.
       L.geoJSON(geometry, {{
         interactive: false,
@@ -528,8 +528,9 @@ const MAP_DATA = {data_json};
       btn.addEventListener("click", function () {{
         const layer = layersByKey.get(key);
         if (!layer) return;
-        setActive(key);
+        // Navigate first: a highlight failure must not cost the user the zoom.
         map.fitBounds(layer.getBounds(), {{ padding: [36, 36], maxZoom: 18 }});
+        setActive(key);
         layer.openPopup();
       }});
       wrap.appendChild(btn);

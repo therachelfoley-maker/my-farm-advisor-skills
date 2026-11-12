@@ -16,6 +16,10 @@ For every grower found under `growers/`, the generator walks every farm and draw
 polygon from the canonical `boundary/field_boundaries.geojson`:
 
 - All fields for the grower, color-coded per farm.
+- **Every field carries a white casing** under its farm-coloured outline, so an edge never
+  depends on the basemap tone: the casing reads over dark canopy, the farm stroke over pale
+  soil. Farm hues lead with magenta, blue, and purple, which sit 74–103 ΔE from green
+  vegetation; the old palette led with `#1B5E20`, only 20–31 ΔE from the crop.
 - **Selected field in amber.** Farm colour only separates farms; selection gets its own
   accent — a white casing under a 3.5 px `#FFB300` outline and a light `#FFC400` wash — so it
   stays visible over green crops, tan residue, and pale bare soil alike. Hover is a softer

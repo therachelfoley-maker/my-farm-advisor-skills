@@ -45,37 +45,50 @@ from lib.us_states import state_abbr  # noqa: E402
 
 CDL_YEAR_RE = re.compile(r"_(\d{4})_cdl\.csv$")
 TARGET_CRS = "EPSG:4326"
+# Ordered by how far each hue sits from green vegetation (CIE76 dE 74-103 for
+# the first four vs 20-31 for the greens they replaced). Orange is last because
+# it is only dE 48 from the amber selection colour and would read as a muddy
+# highlight if it ever landed on early field slots.
 FARM_COLORS = [
-    "#1B5E20",
-    "#0D47A1",
-    "#B71C1C",
-    "#4A148C",
-    "#E65100",
-    "#00695C",
+    "#D81B60",
+    "#1E88E5",
+    "#7B1FA2",
+    "#C62828",
+    "#00897B",
     "#283593",
     "#5D4037",
+    "#E65100",
 ]
 
-BASE_WEIGHT = 2
-BASE_FILL_OPACITY = 0.18
-HOVER_WEIGHT = 2.5
-HOVER_FILL_OPACITY = 0.26
+BASE_WEIGHT = 2.2
+BASE_FILL_OPACITY = 0.22
+BASE_CASING_WEIGHT = 4.5
+BASE_CASING_OPACITY = 0.55
+HOVER_WEIGHT = 3.0
+HOVER_FILL_OPACITY = 0.30
+HOVER_CASING_WEIGHT = 5.5
+HOVER_CASING_OPACITY = 0.70
 
 # Selection is deliberately not a farm colour: farm colour separates farms, amber
 # marks the field you picked. The white casing keeps the amber stroke readable
-# over green crops, tan residue, and pale bare soil alike.
+# over green crops, tan residue, and pale bare soil alike. Every unselected field
+# also carries a quieter casing, so an outline never depends on the basemap tone.
 HIGHLIGHT = {
     "stroke": "#FFB300",
     "fill": "#FFC400",
     "weight": 3.5,
     "fillOpacity": 0.25,
     "casing": "#FFFFFF",
-    "casingWeight": 6.5,
+    "casingWeight": 7.5,
     "casingOpacity": 0.85,
     "baseWeight": BASE_WEIGHT,
     "baseFillOpacity": BASE_FILL_OPACITY,
+    "baseCasingWeight": BASE_CASING_WEIGHT,
+    "baseCasingOpacity": BASE_CASING_OPACITY,
     "hoverWeight": HOVER_WEIGHT,
     "hoverFillOpacity": HOVER_FILL_OPACITY,
+    "hoverCasingWeight": HOVER_CASING_WEIGHT,
+    "hoverCasingOpacity": HOVER_CASING_OPACITY,
 }
 
 
@@ -353,17 +366,34 @@ const MAP_DATA = {data_json};
   const layersByKey = new Map();
   const layerFarmColor = new Map();
   const geometryByKey = new Map();
+  const casingByKey = new Map();
   let activeKey = null;
   let highlightGroup = null;
 
-  function baseStyle(key) {{
+  // Every field is drawn twice: a white casing underneath, then the farm-coloured
+  // stroke and fill on top. Over dark canopy the casing carries the outline, over
+  // pale soil the dark stroke does, so no single basemap tone can swallow a field.
+  const casingGroup = L.layerGroup().addTo(map);
+
+  function fieldStyle(key, mode) {{
     const color = layerFarmColor.get(key);
-    return {{ color: color, weight: HL.baseWeight, fillColor: color, fillOpacity: HL.baseFillOpacity }};
+    if (mode === "hover") {{
+      return [
+        {{ color: color, weight: HL.hoverWeight, fillColor: color, fillOpacity: HL.hoverFillOpacity }},
+        {{ color: HL.casing, weight: HL.hoverCasingWeight, opacity: HL.hoverCasingOpacity, fill: false }}
+      ];
+    }}
+    return [
+      {{ color: color, weight: HL.baseWeight, fillColor: color, fillOpacity: HL.baseFillOpacity }},
+      {{ color: HL.casing, weight: HL.baseCasingWeight, opacity: HL.baseCasingOpacity, fill: false }}
+    ];
   }}
 
-  function hoverStyle(key) {{
-    const color = layerFarmColor.get(key);
-    return {{ color: color, weight: HL.hoverWeight, fillColor: color, fillOpacity: HL.hoverFillOpacity }};
+  function applyFieldStyle(key, mode) {{
+    const styles = fieldStyle(key, mode);
+    const layer = layersByKey.get(key);
+    if (layer) {{ layer.setStyle(styles[0]); }}
+    (casingByKey.get(key) || []).forEach(function (casing) {{ casing.setStyle(styles[1]); }});
   }}
 
   function esc(value) {{
@@ -396,17 +426,27 @@ const MAP_DATA = {data_json};
     }}) }};
 
     L.geoJSON(geojson, {{
-      style: function (feature) {{ return baseStyle(feature.properties.key); }},
+      style: function (feature) {{ return fieldStyle(feature.properties.key, "base")[0]; }},
       onEachFeature: function (feature, layer) {{
         const key = feature.properties.key;
         const field = farms[feature.properties.farmIndex].fields[feature.properties.fieldIndex];
+        const casings = [];
+        L.geoJSON(feature.geometry, {{
+          interactive: false,
+          style: function () {{ return fieldStyle(key, "base")[1]; }}
+        }}).eachLayer(function (casing) {{
+          casing.addTo(casingGroup);
+          casings.push(casing);
+        }});
+        casingByKey.set(key, casings);
+
         layer.bindPopup(function () {{ return popupHtml(field, farm); }});
         layer.on("click", function () {{ setActive(key); }});
         layer.on("mouseover", function () {{
-          if (activeKey !== key) {{ layer.setStyle(hoverStyle(key)); }}
+          if (activeKey !== key) {{ applyFieldStyle(key, "hover"); }}
         }});
         layer.on("mouseout", function () {{
-          if (activeKey !== key) {{ layer.setStyle(baseStyle(key)); }}
+          if (activeKey !== key) {{ applyFieldStyle(key, "base"); }}
         }});
         layersByKey.set(key, layer);
         layerFarmColor.set(key, color);
@@ -421,8 +461,8 @@ const MAP_DATA = {data_json};
 
   function setActive(key) {{
     activeKey = key;
-    layersByKey.forEach(function (layer, layerKey) {{
-      layer.setStyle(baseStyle(layerKey));
+    layersByKey.forEach(function (_, layerKey) {{
+      applyFieldStyle(layerKey, "base");
     }});
 
     clearHighlight();

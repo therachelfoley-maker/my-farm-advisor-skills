@@ -16,6 +16,11 @@ For every grower found under `growers/`, the generator walks every farm and draw
 polygon from the canonical `boundary/field_boundaries.geojson`:
 
 - All fields for the grower, color-coded per farm.
+- **Selected field in amber.** Farm colour only separates farms; selection gets its own
+  accent — a white casing under a 3.5 px `#FFB300` outline and a light `#FFC400` wash — so it
+  stays visible over green crops, tan residue, and pale bare soil alike. Hover is a softer
+  cue in the field's own colour, so hover and selection no longer look alike. The sidebar
+  mirrors the same amber accent and the footer shows a legend swatch.
 - Zoom and pan: wheel, double-click, pinch, `+ / −`, and box-zoom (`Shift` + drag).
 - A "Fit all fields" reset, plus a sidebar field list that zooms to a single field and opens
   its popup.

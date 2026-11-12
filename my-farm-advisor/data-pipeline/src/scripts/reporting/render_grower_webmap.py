@@ -56,6 +56,29 @@ FARM_COLORS = [
     "#5D4037",
 ]
 
+BASE_WEIGHT = 2
+BASE_FILL_OPACITY = 0.18
+HOVER_WEIGHT = 2.5
+HOVER_FILL_OPACITY = 0.26
+
+# Selection is deliberately not a farm colour: farm colour separates farms, amber
+# marks the field you picked. The white casing keeps the amber stroke readable
+# over green crops, tan residue, and pale bare soil alike.
+HIGHLIGHT = {
+    "stroke": "#FFB300",
+    "fill": "#FFC400",
+    "weight": 3.5,
+    "fillOpacity": 0.25,
+    "casing": "#FFFFFF",
+    "casingWeight": 6.5,
+    "casingOpacity": 0.85,
+    "baseWeight": BASE_WEIGHT,
+    "baseFillOpacity": BASE_FILL_OPACITY,
+    "hoverWeight": HOVER_WEIGHT,
+    "hoverFillOpacity": HOVER_FILL_OPACITY,
+}
+
+
 def _read_json(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -245,10 +268,13 @@ def _build_html(payload: dict[str, Any]) -> str:
   .chip {{ width: 11px; height: 11px; border-radius: 3px; flex: 0 0 11px; }}
   .field-btn {{ display: block; width: 100%; text-align: left; border: 1px solid transparent; background: none; border-radius: 6px; padding: 7px 8px; cursor: pointer; font: inherit; }}
   .field-btn:hover {{ background: #f4f8f1; border-color: var(--line); }}
-  .field-btn.active {{ background: #e8f2e3; border-color: #b9d3ae; }}
+  .field-btn.active {{ background: #FFF8E1; border-color: #FFE082; box-shadow: inset 3px 0 0 #FFB300; }}
+  .field-btn.active .name {{ font-weight: 600; }}
   .field-btn .name {{ display: block; font-size: .84rem; }}
   .field-btn .meta {{ display: block; color: var(--muted); font-size: .72rem; margin-top: 2px; }}
   #sidebar footer {{ padding: 10px 16px 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: .68rem; line-height: 1.45; }}
+  #sidebar footer .legend {{ display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--ink); font-size: .7rem; }}
+  #sidebar footer .legend i {{ width: 15px; height: 10px; flex: 0 0 15px; border: 2px solid #FFB300; border-radius: 2px; background: rgba(255, 196, 0, 0.25); box-shadow: 0 0 0 1px #fff; }}
   #map {{ flex: 1; min-width: 0; }}
   #net-hint {{ display: none; background: #fff4e0; color: #7a4c00; font-size: .72rem; padding: 6px 16px; border-bottom: 1px solid #f0d7ab; }}
   .leaflet-popup-content {{ margin: 10px 12px; font-size: .78rem; line-height: 1.5; }}
@@ -274,6 +300,7 @@ def _build_html(payload: dict[str, Any]) -> str:
     <div id="tools"><button class="fit-all" id="fit-all" type="button">Fit all fields</button></div>
     <div id="fields"></div>
     <footer>
+      <div class="legend"><i></i>Amber outline = selected field</div>
       Basemap: Esri World Imagery (internet required). Field polygons from pipeline boundary GeoJSON.
       Crop labels are USDA CDL class shares, not planting records.
     </footer>
@@ -287,6 +314,7 @@ const MAP_DATA = {data_json};
 (function () {{
   const farms = MAP_DATA.farms;
   const palette = {json.dumps(FARM_COLORS)};
+  const HL = {json.dumps(HIGHLIGHT)};
 
   const map = L.map("map", {{
     zoomControl: true,
@@ -324,7 +352,19 @@ const MAP_DATA = {data_json};
 
   const layersByKey = new Map();
   const layerFarmColor = new Map();
+  const geometryByKey = new Map();
   let activeKey = null;
+  let highlightGroup = null;
+
+  function baseStyle(key) {{
+    const color = layerFarmColor.get(key);
+    return {{ color: color, weight: HL.baseWeight, fillColor: color, fillOpacity: HL.baseFillOpacity }};
+  }}
+
+  function hoverStyle(key) {{
+    const color = layerFarmColor.get(key);
+    return {{ color: color, weight: HL.hoverWeight, fillColor: color, fillOpacity: HL.hoverFillOpacity }};
+  }}
 
   function esc(value) {{
     return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {{
@@ -356,32 +396,57 @@ const MAP_DATA = {data_json};
     }}) }};
 
     L.geoJSON(geojson, {{
-      style: {{ color: color, weight: 2, fillColor: color, fillOpacity: 0.18 }},
+      style: function (feature) {{ return baseStyle(feature.properties.key); }},
       onEachFeature: function (feature, layer) {{
         const key = feature.properties.key;
         const field = farms[feature.properties.farmIndex].fields[feature.properties.fieldIndex];
         layer.bindPopup(function () {{ return popupHtml(field, farm); }});
         layer.on("click", function () {{ setActive(key); }});
-        layer.on("mouseover", function () {{ layer.setStyle({{ weight: 3, fillOpacity: 0.30 }}); }});
+        layer.on("mouseover", function () {{
+          if (activeKey !== key) {{ layer.setStyle(hoverStyle(key)); }}
+        }});
         layer.on("mouseout", function () {{
-          if (activeKey !== key) {{ layer.setStyle({{ weight: 2, fillOpacity: 0.18 }}); }}
+          if (activeKey !== key) {{ layer.setStyle(baseStyle(key)); }}
         }});
         layersByKey.set(key, layer);
         layerFarmColor.set(key, color);
+        geometryByKey.set(key, feature.geometry);
       }}
     }}).addTo(group);
   }});
 
+  function clearHighlight() {{
+    if (highlightGroup) {{ map.removeLayer(highlightGroup); highlightGroup = null; }}
+  }}
+
   function setActive(key) {{
     activeKey = key;
     layersByKey.forEach(function (layer, layerKey) {{
-      if (layerKey === key) {{
-        layer.setStyle({{ weight: 3, fillOpacity: 0.34, color: layerFarmColor.get(layerKey) }});
-        layer.bringToFront();
-      }} else {{
-        layer.setStyle({{ weight: 2, fillOpacity: 0.18, color: layerFarmColor.get(layerKey) }});
-      }}
+      layer.setStyle(baseStyle(layerKey));
     }});
+
+    clearHighlight();
+    if (key && geometryByKey.has(key)) {{
+      const geometry = geometryByKey.get(key);
+      highlightGroup = L.layerGroup().addTo(map);
+      // White casing first so the amber stroke survives any basemap tone.
+      L.geoJSON(geometry, {{
+        interactive: false,
+        style: {{ color: HL.casing, weight: HL.casingWeight, opacity: HL.casingOpacity, fill: false }}
+      }}).addTo(highlightGroup);
+      L.geoJSON(geometry, {{
+        interactive: false,
+        style: {{
+          color: HL.stroke,
+          weight: HL.weight,
+          opacity: 1,
+          fillColor: HL.fill,
+          fillOpacity: HL.fillOpacity
+        }}
+      }}).addTo(highlightGroup);
+      highlightGroup.bringToFront();
+    }}
+
     document.querySelectorAll(".field-btn").forEach(function (btn) {{
       btn.classList.toggle("active", btn.dataset.key === key);
     }});

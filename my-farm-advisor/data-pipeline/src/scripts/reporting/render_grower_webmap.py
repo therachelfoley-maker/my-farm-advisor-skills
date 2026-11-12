@@ -281,6 +281,8 @@ def _build_html(payload: dict[str, Any]) -> str:
   .chip {{ width: 11px; height: 11px; border-radius: 3px; flex: 0 0 11px; }}
   .field-btn {{ display: block; width: 100%; text-align: left; border: 1px solid transparent; background: none; border-radius: 6px; padding: 7px 8px; cursor: pointer; font: inherit; }}
   .field-btn:hover {{ background: #f4f8f1; border-color: var(--line); }}
+  .field-btn:focus-visible {{ outline: 2px solid #14210f; outline-offset: 1px; }}
+  .field-btn:hover .name, .field-btn:focus-visible .name {{ text-decoration: underline; text-underline-offset: 2px; }}
   .field-btn.active {{ background: #FFF8E1; border-color: #FFE082; box-shadow: inset 3px 0 0 #FFB300; }}
   .field-btn.active .name {{ font-weight: 600; }}
   .field-btn .name {{ display: block; font-size: .84rem; }}
@@ -488,7 +490,9 @@ const MAP_DATA = {data_json};
     }}
 
     document.querySelectorAll(".field-btn").forEach(function (btn) {{
-      btn.classList.toggle("active", btn.dataset.key === key);
+      const isActive = btn.dataset.key === key;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     }});
   }}
 
@@ -511,6 +515,8 @@ const MAP_DATA = {data_json};
       btn.type = "button";
       btn.className = "field-btn";
       btn.dataset.key = key;
+      btn.setAttribute("aria-label", "Zoom to " + field.label);
+      btn.setAttribute("aria-pressed", "false");
       const name = document.createElement("span");
       name.className = "name";
       name.textContent = field.label;

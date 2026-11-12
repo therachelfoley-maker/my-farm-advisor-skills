@@ -27,7 +27,8 @@ polygon from the canonical `boundary/field_boundaries.geojson`:
   mirrors the same amber accent and the footer shows a legend swatch.
 - Zoom and pan: wheel, double-click, pinch, `+ / −`, and box-zoom (`Shift` + drag).
 - A "Fit all fields" reset, plus a sidebar field list that zooms to a single field and opens
-  its popup.
+  its popup. Each row is a keyboard-focusable button with a visible focus ring, a hover
+  underline, and `aria-label` / `aria-pressed` state.
 - Popups with grower, farm, field label, field ID, acres, county/state, boundary source, and
   the dominant USDA CDL class share for the newest available CDL year.
 - Basemap switcher: **Esri World Imagery** (default) and OpenStreetMap streets, with the

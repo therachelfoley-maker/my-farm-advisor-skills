@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from lib.runtime_paths import resolve_runtime_paths
+from lib.us_states import normalize_state, state_abbr
 
 
 _RUNTIME_PATHS = resolve_runtime_paths()
@@ -265,12 +266,52 @@ def ensure_canonical_field_artifacts(
     _write_text(base / "logs" / "pipeline_runs.jsonl", "", overwrite=False)
 
 
+def _boundary_state_fips(grower_slug: str, farm_slug: str) -> str | None:
+    """Read the first usable state FIPS code from the farm boundary GeoJSON."""
+    boundary = farm_root(grower_slug, farm_slug) / "boundary" / "field_boundaries.geojson"
+    if not boundary.exists():
+        return None
+    try:
+        payload = json.loads(boundary.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    for feature in payload.get("features") or []:
+        properties = (feature or {}).get("properties") or {}
+        fips = properties.get("state_fips")
+        if fips:
+            return str(fips)
+    return None
+
+
+def _existing_farm_state(grower_slug: str, farm_slug: str) -> str | None:
+    path = farm_root(grower_slug, farm_slug) / "farm.json"
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8")).get("state")
+    except (OSError, json.JSONDecodeError):
+        return None
+    return value.strip().upper() if isinstance(value, str) and value.strip() else None
+
+
+def _resolve_farm_state(grower_slug: str, farm_slug: str, explicit: str | None) -> str | None:
+    """Resolve farm state from an explicit value, the boundary, then existing metadata."""
+    explicit_state = normalize_state(explicit)
+    if explicit_state:
+        return explicit_state
+    boundary_state = state_abbr(_boundary_state_fips(grower_slug, farm_slug))
+    if boundary_state:
+        return boundary_state
+    return _existing_farm_state(grower_slug, farm_slug)
+
+
 def ensure_canonical_data_tree(
     grower_slug: str = DEFAULT_GROWER,
     farm_slug: str = DEFAULT_FARM,
     farm_name: str = DEFAULT_FARM_NAME,
     inventory_path: Path | None = None,
     include_farm: bool = True,
+    state: str | None = None,
 ) -> list[str]:
     (DATA_ROOT / "shared" / "weather").mkdir(parents=True, exist_ok=True)
     (DATA_ROOT / "shared" / "geoadmin" / "l0_countries" / "raw").mkdir(
@@ -406,18 +447,22 @@ def ensure_canonical_data_tree(
     (farm / "derived" / "summaries").mkdir(parents=True, exist_ok=True)
     (farm / "derived" / "dashboards").mkdir(parents=True, exist_ok=True)
     (farm / "derived" / "tables").mkdir(parents=True, exist_ok=True)
-    _write_json(
-        farm / "farm.json",
+    resolved_state = _resolve_farm_state(grower_slug, farm_slug, state)
+    farm_metadata: dict[str, str] = {
+        "grower_slug": grower_slug,
+        "farm_slug": farm_slug,
+        "display_name": farm_name,
+    }
+    if resolved_state:
+        farm_metadata["state"] = resolved_state
+    farm_metadata.update(
         {
-            "grower_slug": grower_slug,
-            "farm_slug": farm_slug,
-            "display_name": farm_name,
-            "state": "IA",
             "country": "US",
             "default_crs": "EPSG:4326",
             "notes": "Canonical farm metadata",
-        },
+        }
     )
+    _write_json(farm / "farm.json", farm_metadata)
     _write_text(farm / "logs" / "pipeline_runs.jsonl", "", overwrite=False)
 
     slugs = field_slugs_from_inventory(inventory_path=inventory_path)

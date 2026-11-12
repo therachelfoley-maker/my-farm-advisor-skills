@@ -70,10 +70,9 @@ The map adds no new geospatial data. It reuses:
 
 ## Known Data Caveats
 
-- Seeded `farm.json` files may carry a state value that disagrees with the boundary (for
-  example, the Illinois demo farm records `state: "IA"`). The map ignores that field and
-  derives state from boundary `state_fips`. This is a seeding metadata issue for a separate
-  fix, not something this subskill papers over silently.
+- `farm.json` state is now derived from the farm boundary (`state_fips`) when the canonical
+  metadata is written, with an explicit override and a preserve-existing fallback. The map
+  still reads geography from the boundary so a hand-edited `farm.json` cannot skew it.
 - OSM boundaries may carry generic `crop_name: farmland`. The popup therefore uses CDL for
   crop context and falls back to omitting the crop line.
 - Field `display_name` often equals the slug; the map shows a readable `Field <id>` label and

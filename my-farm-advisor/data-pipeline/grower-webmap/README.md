@@ -25,8 +25,9 @@ polygon from the canonical `boundary/field_boundaries.geojson`:
   required Esri/Maxar attribution.
 - A banner that appears if tiles cannot load, so an offline open does not look broken.
 
-Geography comes from the boundary features (`state_fips`, `county_name`) rather than
-`farm.json`, because the seeded farm metadata is not guaranteed to agree with the boundary.
+Geography comes from the boundary features (`state_fips`, `county_name`). `farm.json` is used
+for the display name only; the map does not trust its `state` value, so it cannot drift from
+the geometry even if metadata is hand-edited.
 
 ## Inputs
 

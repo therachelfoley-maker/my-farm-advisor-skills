@@ -41,10 +41,10 @@ from lib.paths import (  # noqa: E402
     farm_boundary_path,
     grower_dir,
 )
+from lib.us_states import state_abbr  # noqa: E402
 
 CDL_YEAR_RE = re.compile(r"_(\d{4})_cdl\.csv$")
 TARGET_CRS = "EPSG:4326"
-CDL_LATEST_YEAR_DEFAULT = 2025
 FARM_COLORS = [
     "#1B5E20",
     "#0D47A1",
@@ -55,19 +55,6 @@ FARM_COLORS = [
     "#283593",
     "#5D4037",
 ]
-STATE_ABBR = {
-    "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO",
-    "09": "CT", "10": "DE", "11": "DC", "12": "FL", "13": "GA", "15": "HI",
-    "16": "ID", "17": "IL", "18": "IN", "19": "IA", "20": "KS", "21": "KY",
-    "22": "LA", "23": "ME", "24": "MD", "25": "MA", "26": "MI", "27": "MN",
-    "28": "MS", "29": "MO", "30": "MT", "31": "NE", "32": "NV", "33": "NH",
-    "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND", "39": "OH",
-    "40": "OK", "41": "OR", "42": "PA", "44": "RI", "45": "SC", "46": "SD",
-    "47": "TN", "48": "TX", "49": "UT", "50": "VT", "51": "VA", "53": "WA",
-    "54": "WV", "55": "WI", "56": "WY", "60": "AS", "66": "GU", "69": "MP",
-    "72": "PR", "78": "VI",
-}
-
 
 def _read_json(path: Path) -> dict[str, Any]:
     try:
@@ -189,7 +176,7 @@ def _collect_grower(grower_slug: str, cdl_year_override: int | None) -> dict[str
                     "field_id": field_id,
                     "area_acres": round(float(props.get("area_acres") or 0.0), 3),
                     "county": str(props.get("county_name") or "").strip() or None,
-                    "state": STATE_ABBR.get(state_fips),
+                    "state": state_abbr(state_fips),
                     "source": str(props.get("source") or "").strip() or None,
                     "crop": {"year": cdl_year, "name": crop[0], "pct": round(crop[1], 1)} if crop else None,
                     "geometry": _round_coords(mapping(geometry), 6),

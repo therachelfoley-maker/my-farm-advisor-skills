@@ -184,6 +184,20 @@ cd ../..
 ./scripts/validate.sh
 ```
 
+Render the grower-level interactive web map from the runtime source copy. It reads existing
+boundary GeoJSON and CDL tables, writes `growers/<grower>/webmap/<grower>_fields_map.html`
+plus a manifest, and needs no new dependencies:
+
+```bash
+export DATA_PIPELINE_DATA_ROOT=/absolute/path/to/my-farm-advisor-runtime
+cd "${DATA_PIPELINE_DATA_ROOT}/data-pipeline/src"
+"${DATA_PIPELINE_DATA_ROOT}/data-pipeline/.venv/bin/python" \
+  scripts/reporting/render_grower_webmap.py --grower il-grower
+```
+
+Omit `--grower` to render every grower with a `farms/` directory. See
+[grower-webmap/SKILL.md](grower-webmap/SKILL.md) for the map contract and limits.
+
 ## Local workflow notes
 
 - Keep this skill tiny and operational: copy baseline files from `src/` into live storage, preserve live data across reboot or redeploy, and use auditable `rsync` commands.

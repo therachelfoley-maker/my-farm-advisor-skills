@@ -45,18 +45,19 @@ from lib.us_states import state_abbr  # noqa: E402
 
 CDL_YEAR_RE = re.compile(r"_(\d{4})_cdl\.csv$")
 TARGET_CRS = "EPSG:4326"
-# Ordered by how far each hue sits from green vegetation (CIE76 dE 74-103 for
-# the first four vs 20-31 for the greens they replaced). Orange is last because
-# it is only dE 48 from the amber selection colour and would read as a muddy
-# highlight if it ever landed on early field slots.
+# Ordered by how far each hue sits from green vegetation (CIE76 dE 62-76 for the
+# lead colour vs 20-31 for the greens it replaced). The lead has to be calm: both
+# demo growers have a single farm, so palette[0] paints every field. #283593 is
+# omitted on purpose - it is only dE 23.8 from the lead and would make a second
+# farm indistinguishable from the first. Orange is last because it is just
+# dE 48 from the amber selection colour.
 FARM_COLORS = [
+    "#5C6BC0",
+    "#00897B",
     "#D81B60",
-    "#1E88E5",
+    "#5D4037",
     "#7B1FA2",
     "#C62828",
-    "#00897B",
-    "#283593",
-    "#5D4037",
     "#E65100",
 ]
 
@@ -377,8 +378,7 @@ const MAP_DATA = {data_json};
   // pale soil the dark stroke does, so no single basemap tone can swallow a field.
   const casingGroup = L.layerGroup().addTo(map);
 
-  function fieldStyle(key, mode) {{
-    const color = layerFarmColor.get(key);
+  function fieldStyle(color, mode) {{
     if (mode === "hover") {{
       return [
         {{ color: color, weight: HL.hoverWeight, fillColor: color, fillOpacity: HL.hoverFillOpacity }},
@@ -392,7 +392,7 @@ const MAP_DATA = {data_json};
   }}
 
   function applyFieldStyle(key, mode) {{
-    const styles = fieldStyle(key, mode);
+    const styles = fieldStyle(layerFarmColor.get(key), mode);
     const layer = layersByKey.get(key);
     if (layer) {{ layer.setStyle(styles[0]); }}
     (casingByKey.get(key) || []).forEach(function (casing) {{ casing.setStyle(styles[1]); }});
@@ -428,14 +428,14 @@ const MAP_DATA = {data_json};
     }}) }};
 
     L.geoJSON(geojson, {{
-      style: function (feature) {{ return fieldStyle(feature.properties.key, "base")[0]; }},
+      style: function () {{ return fieldStyle(color, "base")[0]; }},
       onEachFeature: function (feature, layer) {{
         const key = feature.properties.key;
         const field = farms[feature.properties.farmIndex].fields[feature.properties.fieldIndex];
         const casings = [];
         L.geoJSON(feature.geometry, {{
           interactive: false,
-          style: function () {{ return fieldStyle(key, "base")[1]; }}
+          style: function () {{ return fieldStyle(color, "base")[1]; }}
         }}).eachLayer(function (casing) {{
           casing.addTo(casingGroup);
           casings.push(casing);

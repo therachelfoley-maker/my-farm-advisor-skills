@@ -11,6 +11,16 @@ data.
 - Raw boundaries, weather tables, CDL tables and rasters stay in the runtime.
   See `provenance.json` for hashes and row counts.
 
+## Skill and output locations
+
+- **Skill:** `eda-field-level`, at `my-farm-advisor/eda/eda-field-level/`
+  ([`GUIDE.md`](../../GUIDE.md)). It generates static field-boundary, cropland
+  and weather visualizations and comparisons — six figures with statistical
+  tests per category — plus one crop/provenance map.
+- **Generated outputs:** `${DATA_PIPELINE_DATA_ROOT}/data-pipeline/eda/field-level/`
+- **Curated examples:** this folder, `examples/assignment-2/`
+- **Completed report:** [`reports/assignment-2/field-level-eda.html`](../../../../../reports/assignment-2/field-level-eda.html)
+
 ## Figures
 
 | Figure | Story |

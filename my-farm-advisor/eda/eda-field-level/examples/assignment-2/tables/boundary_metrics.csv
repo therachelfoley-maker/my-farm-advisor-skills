@@ -1,0 +1,31 @@
+grower,grower_slug,farm,state,field_id,source,source_class,crop_name,area_acres,area_ha,perimeter_m,compactness,centroid_lat,centroid_lon,label_lat,label_lon,share_of_grower_acres,rank_in_grower
+Illinois,il-grower,illinois-farm,IL,osm-1288035236,OpenStreetMap/Overpass,OpenStreetMap,meadow,3.229,1.30673,516.788,0.614852,40.8245,-87.5889,40.8245,-87.5889,0.000858708,10
+Illinois,il-grower,illinois-farm,IL,osm-1499317763,OpenStreetMap/Overpass,OpenStreetMap,farmland,259.541,105.033,5257.04,0.477585,40.508,-87.7873,40.5112,-87.7849,0.0690215,8
+Illinois,il-grower,illinois-farm,IL,osm-1525396389,OpenStreetMap/Overpass,OpenStreetMap,farmland,50.6285,20.4886,2034.15,0.622239,40.9537,-87.7157,40.9539,-87.7162,0.013464,9
+Illinois,il-grower,illinois-farm,IL,il-r1,usda_csb_fiboa,USDA CSB,Corn,715.1,289.391,16415.6,0.134958,40.587,-87.7182,40.5894,-87.7247,0.190171,1
+Illinois,il-grower,illinois-farm,IL,il-r2,usda_csb_fiboa,USDA CSB,Soybeans,648.5,262.439,10101,0.323225,40.6361,-87.6629,40.6354,-87.663,0.17246,2
+Illinois,il-grower,illinois-farm,IL,il-r3,usda_csb_fiboa,USDA CSB,Corn,541.6,219.178,9429.8,0.30972,40.6293,-87.6588,40.6292,-87.6536,0.144031,3
+Illinois,il-grower,illinois-farm,IL,il-r4,usda_csb_fiboa,USDA CSB,Corn,424.5,171.789,8244.68,0.317548,40.6377,-87.7069,40.6371,-87.7057,0.11289,4
+Illinois,il-grower,illinois-farm,IL,il-r5,usda_csb_fiboa,USDA CSB,Soybeans,376.4,152.324,6682.45,0.428676,40.6508,-87.6775,40.651,-87.6794,0.100098,5
+Illinois,il-grower,illinois-farm,IL,il-r6,usda_csb_fiboa,USDA CSB,Corn,373,150.948,5749.32,0.573841,40.6789,-87.6841,40.6792,-87.6843,0.0991942,6
+Illinois,il-grower,illinois-farm,IL,il-r7,usda_csb_fiboa,USDA CSB,Soybeans,367.8,148.843,5637.91,0.588452,40.5973,-87.7252,40.5978,-87.7254,0.0978114,7
+Iowa,ia-grower,iowa-farm,IA,osm-1360316041,OpenStreetMap/Overpass,OpenStreetMap,farmland,156.013,63.1363,3178.4,0.785363,43.2451,-94.1632,43.2451,-94.1632,0.0444527,8
+Iowa,ia-grower,iowa-farm,IA,osm-1360330526,OpenStreetMap/Overpass,OpenStreetMap,farmland,68.5154,27.7272,2319.63,0.647555,43.2667,-94.1657,43.2671,-94.1656,0.019522,10
+Iowa,ia-grower,iowa-farm,IA,osm-1360336640,OpenStreetMap/Overpass,OpenStreetMap,farmland,114.715,46.4236,2753.13,0.769651,43.2669,-94.183,43.2676,-94.183,0.0326857,9
+Iowa,ia-grower,iowa-farm,IA,ia-r1,usda_csb_fiboa,USDA CSB,Soybeans,873,353.291,16522.9,0.162626,43.2957,-94.0847,43.2954,-94.0867,0.248743,1
+Iowa,ia-grower,iowa-farm,IA,ia-r2,usda_csb_fiboa,USDA CSB,Soybeans,456.1,184.577,8961.42,0.288852,43.3401,-94.1209,43.3402,-94.1205,0.129956,2
+Iowa,ia-grower,iowa-farm,IA,ia-r3,usda_csb_fiboa,USDA CSB,Soybeans,451.2,182.594,8518.04,0.31625,43.3195,-94.0833,43.3204,-94.0832,0.12856,3
+Iowa,ia-grower,iowa-farm,IA,ia-r4,usda_csb_fiboa,USDA CSB,Soybeans,400.8,162.198,6264.78,0.519314,43.2755,-94.1282,43.277,-94.1251,0.1142,4
+Iowa,ia-grower,iowa-farm,IA,ia-r5,usda_csb_fiboa,USDA CSB,Corn,356.2,144.149,8349.84,0.259781,43.2786,-94.0813,43.2774,-94.0828,0.101492,5
+Iowa,ia-grower,iowa-farm,IA,ia-r6,usda_csb_fiboa,USDA CSB,Soybeans,323.7,130.997,7377.25,0.302444,43.2634,-94.0916,43.2628,-94.0891,0.0922316,6
+Iowa,ia-grower,iowa-farm,IA,ia-r7,usda_csb_fiboa,USDA CSB,Soybeans,309.4,125.21,6019.43,0.434186,43.3371,-94.0765,43.3364,-94.0767,0.0881571,7
+Nebraska,ne-grower,nebraska-farm,NE,ne-r1,usda_csb_fiboa,USDA CSB,Corn,307.1,124.279,4983.38,0.628861,40.9052,-97.5494,40.9051,-97.5494,0.122585,1
+Nebraska,ne-grower,nebraska-farm,NE,ne-r2,usda_csb_fiboa,USDA CSB,Corn,279.8,113.231,5213.99,0.523414,40.8327,-97.6079,40.833,-97.6083,0.111688,2
+Nebraska,ne-grower,nebraska-farm,NE,ne-r3,usda_csb_fiboa,USDA CSB,Corn,277.1,112.138,5538.81,0.459298,40.8656,-97.5538,40.8655,-97.5536,0.11061,3
+Nebraska,ne-grower,nebraska-farm,NE,ne-r4,usda_csb_fiboa,USDA CSB,Corn,255.2,103.276,5870.45,0.376596,40.9121,-97.5497,40.9121,-97.55,0.101868,4
+Nebraska,ne-grower,nebraska-farm,NE,ne-r5,usda_csb_fiboa,USDA CSB,Corn,245.5,99.3503,4952.5,0.509022,40.8356,-97.5825,40.8352,-97.5823,0.0979962,5
+Nebraska,ne-grower,nebraska-farm,NE,ne-r6,usda_csb_fiboa,USDA CSB,Soybeans,242.3,98.0553,4819.2,0.530522,40.8947,-97.5735,40.8943,-97.574,0.0967188,6
+Nebraska,ne-grower,nebraska-farm,NE,ne-r7,usda_csb_fiboa,USDA CSB,Corn,233.2,94.3727,6157,0.312821,40.8377,-97.6215,40.8362,-97.6191,0.0930864,7
+Nebraska,ne-grower,nebraska-farm,NE,ne-r8,usda_csb_fiboa,USDA CSB,Corn,232.5,94.0894,5859.48,0.344369,40.9114,-97.6248,40.9118,-97.6216,0.092807,8
+Nebraska,ne-grower,nebraska-farm,NE,ne-r9,usda_csb_fiboa,USDA CSB,Soybeans,217,87.8168,5135.98,0.418324,40.8933,-97.6509,40.8941,-97.6499,0.0866198,9
+Nebraska,ne-grower,nebraska-farm,NE,ne-r10,usda_csb_fiboa,USDA CSB,Soybeans,215.5,87.2098,5019.05,0.434983,40.8533,-97.5656,40.8537,-97.5667,0.0860211,10

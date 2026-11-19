@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-11-19T07:53:09+00:00",
+  "skill": "eda-field-level",
+  "source": "${DATA_PIPELINE_DATA_ROOT}/data-pipeline/eda/field-level",
+  "skill_commit": "cc9fc460847ea1c5ec69d0c580f4fec17abc85a6",
+  "note": "Derived analysis artifacts only. Raw field boundaries, weather tables, CDL tables and rasters stay in the runtime and are not committed.",
+  "budget": {
+    "total_bytes": 1087921,
+    "total_limit_bytes": 8000000,
+    "png_limit_bytes": 1500000,
+    "csv_limit_bytes": 200000
+  },
+  "files": [
+    {
+      "path": "figures/fig_boundary_area.png",
+      "bytes": 106823,
+      "sha256": "28cb545af3238f7756113e0ac1dbf38b49e2d0d1086b4fff5856ad128fdb35a9",
+      "rows": null
+    },
+    {
+      "path": "figures/fig_boundary_concentration.png",
+      "bytes": 144089,
+      "sha256": "aed44928a5a89af013efef2293aabb8277c1f19d11bcf19e3c8b407a51d31014",
+      "rows": null
+    },
+    {
+      "path": "figures/fig_crop_corn_share.png",
+      "bytes": 71708,
+      "sha256": "19f9391f11a3b810650141839996d013ecb22ba0a3aa5e084ea6234803fc5867",
+      "rows": null
+    },
+    {
+      "path": "figures/fig_crop_rotation_heatmap.png",
+      "bytes": 140795,
+      "sha256": "8184287306ea57f223388ea51f2358eef9fd0c5110eb2e2873833472d16c1005",
+      "rows": null
+    },
+    {
+      "path": "figures/fig_weather_gdd_heatmap.png",
+      "bytes": 309657,
+      "sha256": "c60f81ee3ceb25b670ffa88cae2a982a6109eef01a53171d499b6d7a348c46ad",
+      "rows": null
+    },
+    {
+      "path": "figures/fig_weather_precip_distribution.png",
+      "bytes": 84971,
+      "sha256": "3de02559cf288e38cdba6e97b747bd58ab5900bd1fc1746c6de46e167f427c5f",
+      "rows": null
+    },
+    {
+      "path": "maps/map_crop_2025_source.png",
+      "bytes": 166598,
+      "sha256": "038f2e40fa882edc47f41affbb7a82e462287a8c6acadea3a7ef4fac7f2a8e12",
+      "rows": null
+    },
+    {
+      "path": "tables/boundary_metrics.csv",
+      "bytes": 4721,
+      "sha256": "0f748d6db8a1f293343e3aaacae2c09efe5fbe091cc4aef10e4b2996fe45dd83",
+      "rows": 30
+    },
+    {
+      "path": "tables/crop_composition.csv",
+      "bytes": 16748,
+      "sha256": "f408b215e9e49491e2b0d438013e21decf8481ab233aaee0d7ac8ae376c488a4",
+      "rows": 438
+    },
+    {
+      "path": "tables/crop_field_summary.csv",
+      "bytes": 5133,
+      "sha256": "92b1d7b28710ccdce330be03a226fcb83ed13b84621d874d63527c6e96f7f974",
+      "rows": 30
+    },
+    {
+      "path": "tables/stats_results.csv",
+      "bytes": 6180,
+      "sha256": "15bb626e7001b883d25840c5baa78d8338d6545fac0b0abf53509612807d8e13",
+      "rows": 36
+    },
+    {
+      "path": "tables/stats_results.json",
+      "bytes": 20479,
+      "sha256": "45d020faafa5ba0b3e4834e131480124f90f7a53cbf77be31f17c89c41bc0ffa",
+      "rows": null
+    },
+    {
+      "path": "tables/weather_cell_year.csv",
+      "bytes": 2080,
+      "sha256": "928961589176f93ac374905377a4cd8bc779cc9d763f3bdf0d14da47fbee13a6",
+      "rows": 25
+    },
+    {
+      "path": "tables/weather_seasonal.csv",
+      "bytes": 7939,
+      "sha256": "05aff928d10793c56216a5b766bea7cbbabac503821c41283f854e98c77b912b",
+      "rows": 150
+    }
+  ]
+}

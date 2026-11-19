@@ -1,0 +1,37 @@
+category,analysis,metric,group_a,group_b,n_a,n_b,median_a,median_b,statistic,p_value,p_adjusted,p_adjusted_family,effect_size,effect_size_name,ci_low,ci_high,note
+boundaries,kruskal_wallis,field_area_acres,all growers,,30,,293.45,,4.46194,0.107424,0.107424,,0.0911828,epsilon-squared,,,"All 10 fields per grower, legacy OSM included"
+boundaries,mann_whitney,field_area_acres,Illinois,Iowa,10,10,374.7,339.95,55,0.73373,0.73373,,0.1,rank-biserial,,,Holm within the 3 grower pairs
+boundaries,mann_whitney,field_area_acres,Illinois,Nebraska,10,10,374.7,243.9,77,0.0451546,0.135464,,0.54,rank-biserial,,,Holm within the 3 grower pairs
+boundaries,mann_whitney,field_area_acres,Iowa,Nebraska,10,10,339.95,243.9,70,0.140465,0.28093,,0.4,rank-biserial,,,Holm within the 3 grower pairs
+boundaries,gini,field_area_acres,Illinois,,10,,,,0.323797,,,,0.323797,gini,0.140267,0.498721,"2000 bootstrap resamples, 95% percentile interval"
+boundaries,gini,field_area_acres,Iowa,,10,,,,0.325181,,,,0.325181,gini,0.139402,0.438642,"2000 bootstrap resamples, 95% percentile interval"
+boundaries,gini,field_area_acres,Nebraska,,10,,,,0.0621188,,,,0.0621188,gini,0.0307598,0.0760375,"2000 bootstrap resamples, 95% percentile interval"
+boundaries,permutation_gini_difference,field_area_acres,Illinois,Iowa,10,10,,,-0.0013839,0.992901,0.992901,,-0.0013839,delta-gini,,,"10000 permutations, two-sided, Holm across 3 pairs"
+boundaries,permutation_gini_difference,field_area_acres,Illinois,Nebraska,10,10,,,0.261678,0.010399,0.0207979,,0.261678,delta-gini,,,"10000 permutations, two-sided, Holm across 3 pairs"
+boundaries,permutation_gini_difference,field_area_acres,Iowa,Nebraska,10,10,,,0.263062,0.00279972,0.00839916,,0.263062,delta-gini,,,"10000 permutations, two-sided, Holm across 3 pairs"
+boundaries,kruskal_wallis_csb_only,field_area_acres,CSB fields only,,24,,339.95,,17.0414,0.000199297,0.000199297,,0.716259,epsilon-squared,,,"n per grower: {'Illinois': 7, 'Iowa': 7, 'Nebraska': 10}"
+boundaries,mann_whitney_csb_only,field_area_acres,Illinois,Iowa,7,7,424.5,400.8,31,0.443289,0.443289,,0.265306,rank-biserial,,,Sensitivity: legacy OSM fields removed
+boundaries,mann_whitney_csb_only,field_area_acres,Illinois,Nebraska,7,10,424.5,243.9,70,0.000760306,0.00228092,,1,rank-biserial,,,Sensitivity: legacy OSM fields removed
+boundaries,mann_whitney_csb_only,field_area_acres,Iowa,Nebraska,7,10,400.8,243.9,70,0.000760306,0.00228092,,1,rank-biserial,,,Sensitivity: legacy OSM fields removed
+cropland,kruskal_wallis,2025 corn share (%),all growers,,30,,86.265,,6.73806,0.0344229,0.0344229,,0.175484,epsilon-squared,,,10 fields per grower
+cropland,mann_whitney,2025 corn share (%),Illinois,Iowa,10,10,46.545,1.52,66,0.241322,0.241322,1,0.32,rank-biserial,,,Holm within metric
+cropland,mann_whitney,2025 corn share (%),Illinois,Nebraska,10,10,46.545,96.78,25,0.0640221,0.128044,0.384133,-0.5,rank-biserial,,,Holm within metric
+cropland,mann_whitney,2025 corn share (%),Iowa,Nebraska,10,10,1.52,96.78,20,0.0257481,0.0772442,0.180237,-0.6,rank-biserial,,,Holm within metric
+cropland,kruskal_wallis,continuous-corn frequency,all growers,,30,,0,,21.8903,1.76437e-05,1.76437e-05,,0.736677,epsilon-squared,,,10 fields per grower
+cropland,mann_whitney,continuous-corn frequency,Illinois,Iowa,10,10,0,0,45,0.36812,0.36812,1,-0.1,rank-biserial,,,Holm within metric
+cropland,mann_whitney,continuous-corn frequency,Illinois,Nebraska,10,10,0,0.5,0,5.80618e-05,0.000174185,0.000522556,-1,rank-biserial,,,Holm within metric
+cropland,mann_whitney,continuous-corn frequency,Iowa,Nebraska,10,10,0,0.5,9,0.00123285,0.0024657,0.00986281,-0.82,rank-biserial,,,Holm within metric
+cropland,kruskal_wallis,5-year crop diversity,all growers,,30,,2,,0.557692,0.756656,0.756656,,0,epsilon-squared,,,10 fields per grower
+cropland,mann_whitney,5-year crop diversity,Illinois,Iowa,10,10,2,2,50,1,1,1,0,rank-biserial,,,Holm within metric
+cropland,mann_whitney,5-year crop diversity,Illinois,Nebraska,10,10,2,2,55,0.582778,1,1,0.1,rank-biserial,,,Holm within metric
+cropland,mann_whitney,5-year crop diversity,Iowa,Nebraska,10,10,2,2,55,0.582778,1,1,0.1,rank-biserial,,,Holm within metric
+weather,kruskal_wallis,seasonal GDD,all growers,,25,,1832.82,,14.4332,0.000734283,0.000734283,,0.565147,epsilon-squared,,,"Unit is NASA POWER grid-cell-year, not field-year, because fields inside a grower share cells; n per grower = {'Illinois': 10, 'Iowa': 10, 'Nebraska': 5} (C-day)"
+weather,mann_whitney,seasonal GDD,Illinois,Iowa,10,10,1831.91,1740.64,78,0.0376353,0.0376353,0.150541,0.56,rank-biserial,,,Holm within metric; cell-year observations
+weather,mann_whitney,seasonal GDD,Illinois,Nebraska,10,5,1831.91,2047.95,0,0.00269426,0.00808279,0.0161656,-1,rank-biserial,,,Holm within metric; cell-year observations
+weather,mann_whitney,seasonal GDD,Iowa,Nebraska,10,5,1740.64,2047.95,0,0.00269426,0.00808279,0.0161656,-1,rank-biserial,,,Holm within metric; cell-year observations
+weather,kruskal_wallis,seasonal precipitation,all growers,,25,,473.42,,2.90769,0.23367,0.23367,,0.0412587,epsilon-squared,,,"Unit is NASA POWER grid-cell-year, not field-year, because fields inside a grower share cells; n per grower = {'Illinois': 10, 'Iowa': 10, 'Nebraska': 5} (mm)"
+weather,mann_whitney,seasonal precipitation,Illinois,Iowa,10,10,555.345,470.81,47,0.850107,0.850107,0.850107,-0.06,rank-biserial,,,Holm within metric; cell-year observations
+weather,mann_whitney,seasonal precipitation,Illinois,Nebraska,10,5,555.345,417.59,38,0.125786,0.377359,0.377359,0.52,rank-biserial,,,Holm within metric; cell-year observations
+weather,mann_whitney,seasonal precipitation,Iowa,Nebraska,10,5,470.81,417.59,37,0.158996,0.377359,0.377359,0.48,rank-biserial,,,Holm within metric; cell-year observations
+weather,variance_decomposition,seasonal GDD,within vs between growers,,150,,,,0.822565,,,,0.822565,ICC (between / total),,,"between=33539.1, within=7234.71, field-year values; within-grower replication is grid-cell driven"
+weather,variance_decomposition,seasonal precipitation,within vs between growers,,150,,,,0.230962,,,,0.230962,ICC (between / total),,,"between=3755.02, within=12503.2, field-year values; within-grower replication is grid-cell driven"
